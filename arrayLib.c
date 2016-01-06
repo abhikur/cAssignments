@@ -6,7 +6,7 @@ typedef struct {
 	int length;
 } arrayUtil;
 
-typedef int (*MatchFunc)(int , int);
+typedef int (MatchFunc)(void *, void*);
 
 arrayUtil create(int typeSize , int length) {
 	arrayUtil array;
@@ -50,21 +50,39 @@ int findIndex(arrayUtil util, void * element) {
 }
  
 
-int match(void *hint , void *item) {
-	if(*hint == *item)
+int isDivisibleBy(void *hint , void *item) {
+	if(*((int *)(item)) % *((int *)(hint)) == 0)
 		return 1;
 	return 0;
 }
 
-void * findFirst(arrayUtil util, MatchFunc * match, void* hint){
-	int result = NULL;
+void * findFirst(arrayUtil util, MatchFunc* match, void* hint){
+	int *result = NULL;
 	for(int i=0; i<util.length; i++){
-		if(*match(*hint , ((int *)(util.base))[i]))
-			result = ((int *)(util.base))[i];
-		return NULL;
+		if((*match)( hint , util.base + i*util.typeSize))
+			return (util.base + i*util.typeSize);
 	}
-	return &result;
+	return result;
 }
 
-// int count(ArrayUtil util, MatchFunc* match, void* hint);
+void * findLast(arrayUtil util, MatchFunc* match, void* hint){
+	int *result = NULL;
+	for(int i=0; i<util.length; i++){
+		if((*match)( hint , util.base + i*util.typeSize))
+			result = (util.base + i*util.typeSize);
+	}
+	return result;
+}
 
+int count(arrayUtil util, MatchFunc* match, void* hint) {
+	int count = 0;
+	for(int i=0; i<util.length; i++){
+		if((*match)( hint , util.base + i*util.typeSize))
+			count++;
+	}
+	return count;
+}
+
+int filter(arrayUtil util, MatchFunc* match, void* hint, void** destination, int maxItems ) {
+
+}
