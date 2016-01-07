@@ -7,6 +7,10 @@ typedef struct {
 } arrayUtil;
 
 typedef int (MatchFunc)(void *, void*);
+typedef void (ConvertFunc)(void *, void *, void*);
+typedef void (OperationFunc)(void* , void*);
+typedef void* (ReducerFunc)(void* , void* , void* );
+
 
 arrayUtil create(int typeSize , int length) {
 	arrayUtil array;
@@ -51,13 +55,16 @@ int findIndex(arrayUtil util, void * element) {
  
 
 int isDivisibleBy(void *hint , void *item) {
-	if(*((int *)(item)) % *((int *)(hint)) == 0)
-		return 1;
-	return 0;
+	return (*((int *)(item)) % *((int *)(hint)) == 0);
+}
+
+int isLessThan(void *hint , void *item) {
+	return (*((int *)(item)) < *((int *)(hint)));
 }
 
 void * findFirst(arrayUtil util, MatchFunc* match, void* hint){
-	int *result = NULL;
+	int a = 0;
+	void *result = &a;
 	for(int i=0; i<util.length; i++){
 		if((*match)( hint , util.base + i*util.typeSize))
 			return (util.base + i*util.typeSize);
@@ -66,7 +73,8 @@ void * findFirst(arrayUtil util, MatchFunc* match, void* hint){
 }
 
 void * findLast(arrayUtil util, MatchFunc* match, void* hint){
-	int *result = NULL;
+	int a = 0;
+	int *result = &a;
 	for(int i=0; i<util.length; i++){
 		if((*match)( hint , util.base + i*util.typeSize))
 			result = (util.base + i*util.typeSize);
@@ -84,5 +92,50 @@ int count(arrayUtil util, MatchFunc* match, void* hint) {
 }
 
 int filter(arrayUtil util, MatchFunc* match, void* hint, void** destination, int maxItems ) {
+	int count=0;
+	for(int i=0; i<util.length; i++){
+		if(match( hint, util.base + i*util.typeSize)){
+			if(count<maxItems){
+				destination[count*util.typeSize] = util.base + i*util.typeSize;
+				++count;
+			}
+		}
+	}
+	return count;
 
+}
+
+void increamentOne(void* hint, void* sourceItem, void* destinationItem) {
+	*(int *)destinationItem = *(int *)hint + *(int *)sourceItem;
+}
+
+void map(arrayUtil source, arrayUtil destination, ConvertFunc* convert, void* hint) {
+	void * dest_Base = destination.base;
+	for(int i=0; i<source.length; i++){
+		increamentOne(hint , source.base+i*source.typeSize , dest_Base+i*destination.typeSize);
+	}
+}
+
+void multiplyByAnyNum(void *hint , void *item) {
+	*(int *)item = *(int *)hint * *(int *)item;
+}
+
+void forEach(arrayUtil util, OperationFunc* operation, void* hint){
+	void *base = util.base;
+	for(int i=0; i<util.length; i++) {
+		operation( hint , base+i*util.typeSize);
+	}
+}
+
+void *sumOfArray(void* hint, void* previousItem, void* item) {
+	*(int *)previousItem = *(int *)previousItem + *(int *)item;
+	return previousItem;
+}
+
+void* reduce(arrayUtil util, ReducerFunc* reducer, void* hint, void* initialValue) {
+	int *sum;
+	for(int i=0;i <util.length; i++){
+		sum = reducer(initialValue , util.base , util.base+4);
+	}
+	return sum;
 }
