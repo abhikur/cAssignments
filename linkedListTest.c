@@ -65,15 +65,15 @@ void test_indexOf() {
 	assert(indexOf(list , &b) == 1); 
 }
 
-void test_deleteElementAt() {
-	int a = 2,b=4;
-	LinkedList list = createList();
-	add_to_list(&list , &a);
-	add_to_list(&list , &b);
-	assert(*((int *)deleteElementAt(&list , 0)) == 2);
-	assert(list.length == 1);
-	assert(*(int *)list.first->value == 2);
-}
+// void test_deleteElementAt() {
+// 	int a = 2,b=4;
+// 	LinkedList list = createList();
+// 	add_to_list(&list , &a);
+// 	add_to_list(&list , &b);
+// 	assert(*((int *)deleteElementAt(&list , 0)) == 2);
+// 	assert(list.length == 1);
+// 	assert(*(int *)list.first->value == 2);
+// }
 
 // void test_asArray() {
 // 	int a = 2,b=4;
