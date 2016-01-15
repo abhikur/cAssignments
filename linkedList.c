@@ -12,6 +12,7 @@ typedef struct {
 } LinkedList;
 
 typedef void (*ElementProcessor)(void *);
+typedef int MatchFunc(void*, void*);
 
 LinkedList initiator() {
 	LinkedList List;
@@ -80,3 +81,27 @@ int indexOf(LinkedList list, void *num) {
 	}
 	return -1;
 }
+
+
+
+void * deleteElementAt(LinkedList *list, int index) {
+	Element *elementToDelete = ((Element *)getElementAt(*list , index))->value;
+	Element *tempElement = getElementAt(*list , index);
+	for(int i=0; i<list->length-index-1; i++){
+		tempElement->value = tempElement->next->value;
+		tempElement = tempElement->next;
+	}
+	list->length = list->length-1;
+	return elementToDelete;
+}
+
+int asArray(LinkedList list, void **emptyList, int maxElements) {
+	LinkedList *listToFill = ((LinkedList *)(*emptyList));
+	for(int i=0; i<list.length && i<maxElements; i++){
+		add_to_list(listToFill , list.first->value);
+		list.first = list.first->next;
+	}
+	return listToFill->length;
+}
+
+

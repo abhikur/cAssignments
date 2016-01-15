@@ -65,21 +65,31 @@ void test_indexOf() {
 	assert(indexOf(list , &b) == 1); 
 }
 
-// void test_deleteElementAt() {
-// 	int a = 2,b=4;
-// 	LinkedList list = createList();
-// 	add_to_list(&list , &a);
-// 	add_to_list(&list , &b);
-// 	assert(*((int *)deleteElementAt(&list , 0)) == 2);
-// 	assert(list.length == 1);
-// 	assert(*(int *)list.first->value == 2);
-// }
+void test_deleteElementAt() {
+	int a = 2,b=4,c=6,d=9;
+	LinkedList list = createList();
+	add_to_list(&list , &a);
+	add_to_list(&list , &b);
+	add_to_list(&list , &c);
+	add_to_list(&list , &d);
+	assert(*(int *)deleteElementAt(&list,3) == 9);
+	assert(list.length == 3);
+	assert(*(int *)list.first->value == 2);
+	assert(*(int *)list.first->next->value == 4);
+	assert(*(int *)list.first->next->next->value == 6);
+	assert(*(int *)list.first->next->next->next->value == 9);
+}
 
-// void test_asArray() {
-// 	int a = 2,b=4;
-// 	LinkedList list = createList();
-// 	LinkedList emptyList = createList();
-// 	add_to_list(&list , &a);
-// 	add_to_list(&list , &b);
-// 	assert(asArray(list , &emptyList , 5) == 2);
-// }
+void test_asArray() {
+	int a = 2,b=4;
+	LinkedList list = createList();
+	LinkedList emptyList = createList();
+	void *array = &emptyList;
+	add_to_list(&list , &a);
+	add_to_list(&list , &b);
+	asArray(list , &array , 4);
+	assert(emptyList.length == 2);
+	assert(*(int *)emptyList.first->value == 2);
+	assert(*(int *)emptyList.first->next->value == 4);
+}
+

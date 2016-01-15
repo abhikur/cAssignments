@@ -10,6 +10,7 @@ typedef struct {
 } LinkedList;
 
 typedef void (*ElementProcessor)(void *);
+typedef int MatchFunc(void*, void*);
 
 
 LinkedList createList(void);
@@ -20,3 +21,6 @@ void increament(void *ele);
 void forEach(LinkedList, ElementProcessor e);
 void * getElementAt(LinkedList, int );
 int indexOf(LinkedList, void *);
+void * deleteElementAt(LinkedList *, int);
+int asArray(LinkedList, void **, int);
+
